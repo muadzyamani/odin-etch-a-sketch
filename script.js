@@ -14,22 +14,20 @@ function makeGrids(rows, columns) {
         let cell = document.createElement("div");
         sketchContainer.appendChild(cell).className = "grid-item";
         
-        detectMouseover(cell);
         changeColor(cell);
+        detectMouseover(cell);
     }
 }
 
 function detectMouseover(cell) {
-    cell.addEventListener('mouseover', (event) => {
-        event.target.style.backgroundColor = color;
+    cell.addEventListener('mouseover', () => {
+        
+        if (color === 'rgb') {
+            cell.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
+        } else {
+        cell.style.backgroundColor = color;
+        }
     });
-}
-
-function detectMouseoverRGB() {
-    let color = '#' + Math.random().toString(16).slice(-3);
-    let cells = document.querySelectorAll(".grid-item");
-
-    
 }
 
 function changeColor(cell) {
@@ -41,8 +39,7 @@ function changeColor(cell) {
             let button = event.target.innerText.toLowerCase();
             console.log(button);
             if (button === 'rgb') {
-                // rgb function
-                detectMouseoverRGB();
+                color = 'rgb';
             } else if (button === 'eraser') {
                 color = 'white';
             } else if (button ==='reset') {
@@ -50,6 +47,7 @@ function changeColor(cell) {
             } else {
                 color = event.target.innerText.toLowerCase();
             }
+            
         });
     }
 }
