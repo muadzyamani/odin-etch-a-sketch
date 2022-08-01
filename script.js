@@ -14,6 +14,7 @@ function makeGrids(rows, columns) {
         let cell = document.createElement("div");
         sketchContainer.appendChild(cell).className = "grid-item";
         
+        toggleGridlines(cell);
         changeColor(cell);
         detectMouseover(cell);
     }
@@ -27,6 +28,14 @@ function detectMouseover(cell) {
         } else {
         cell.style.backgroundColor = color;
         }
+    });
+}
+
+function toggleGridlines(cell) {
+    let toggleGridlinesDiv = document.querySelector('.toggle-gridlines');
+    
+    toggleGridlinesDiv.addEventListener('click', () => {
+        cell.classList.toggle('grid-item-toggled');
     });
 }
 
@@ -52,6 +61,25 @@ function changeColor(cell) {
     }
 }
 
+function isValid(gridSize) {
+    let errorDiv = document.querySelector('.error-message');
+    let minGridSize = 2;
+    let maxGridSize = 100;
+    
+    if (gridSize < minGridSize || gridSize > maxGridSize) {
+        errorDiv.textContent = 'Please enter a value from 2 to 100';
+        return false;
+    } else {
+        errorDiv.textContent = '';
+        return true;
+    }
+}
+
+function displayCurrentGrid(gridSize) {
+    let currentGridDiv = document.querySelector('.current-grid');
+    currentGridDiv.textContent = `Current Grid: ${gridSize} x ${gridSize}`;
+}
+
 function clearGrid() {
     let cells = document.querySelectorAll(".grid-item");
 
@@ -62,16 +90,24 @@ function clearGrid() {
 
 function setGrid() {
     let applyButton = document.querySelector(".apply-button")
+    let gridInput = document.querySelector(".grid-input");
     let initialGridSize = 16;
     
     makeGrids(initialGridSize, initialGridSize);
+    displayCurrentGrid(initialGridSize);
     
     applyButton.addEventListener('click', () => {
-        let gridSize = document.querySelector(".grid-input").value;
+        gridSize = gridInput.value;
         gridSize = parseInt(gridSize);
-        console.log(gridSize);
-
-        makeGrids(gridSize, gridSize);
+        
+        // check input validity
+        if (isValid(gridSize)) {
+            makeGrids(gridSize, gridSize);
+            displayCurrentGrid(gridSize);
+        }
+       
+        // clear input field
+        gridInput.value = '';       
     });
 }
 
